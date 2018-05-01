@@ -1,0 +1,27 @@
+@CHARSET "utf-8";
+
+.container {
+	display: grid;
+	grid-gap: 3px;
+	grid-template-columns: repeat(auto-fill , minmax(1fr, 1fr) );
+	grid-template-rows: repeat(8, 100px);
+	grid-auto-flow: dense; /* 빈공간 없애주는애 */
+}
+
+.sixteen {
+	grid-column: span 8;
+	
+}
+
+.eight {
+	grid-column: span 4;
+	/*  grid-row: span 4; */
+}
+
+.four {
+	grid-column: span 2;
+}
+
+.two {
+	grid-column: span 1;
+}
