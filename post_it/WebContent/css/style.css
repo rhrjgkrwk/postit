@@ -1,0 +1,62 @@
+h1 {
+	text-align: center;
+	font-family: fantasy;
+}
+
+.boardlist {
+	width: 60%;
+	margin: 15px auto;
+	padding: 10px;
+	border: solid 1px lightgray;
+	border-radius: 10px;
+}
+
+p {
+	text-align: center;
+}
+
+img {
+	border-radius: 10px;
+}
+
+th, td, tr {
+	text-align: center;
+	vertical-align: middle;
+}
+
+table {
+	text-align: center;
+	width: 100%;
+	vertical-align: middle;
+}
+
+.page {
+	text-align: center;
+}
+
+.header {
+	margin-top: 10px;
+	height: 50px;
+	padding-left: 21%;
+	padding-right: 20%;
+}
+
+.logo {
+	display: inline; height : 100%;
+	text-align: center;
+	font-family: fantasy;
+	vertical-align: middle;
+	font-size: 32px;
+	height: 100%;
+}
+
+.user {
+	display: inline;
+	vertical-align: middle;
+	float: right;
+}
+
+
+.content{
+}
+
