@@ -1,15 +1,22 @@
 <%@page import="dao.MemberDao"%>
+<%@page import="vo.MemberVO"%>
+<%@page import="dao.PostDao"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 
 <%
 	//point를 입력했으면
-	MemberDao dao = new MemberDao();
 	String result = "";
-	if (request.getParameter("point")!=null) {
+	if (request.getParameter("email")!=null) {
 		String email = (String)request.getParameter("email");
-		int point = Integer.parseInt((String)request.getParameter("point"));
-		boolean flag = dao.addPoint(email, point);
+		String password = (String)request.getParameter("password");
+		String name = (String)request.getParameter("name");
+		MemberVO vo = new MemberVO();
+		vo.setEmail(email);
+		vo.setPassword(password);
+		vo.setName(name);
+		
+		boolean flag = new MemberDao().insertUser(vo);
 		if(flag){
 			result = "{\"result\": true}";
 		}

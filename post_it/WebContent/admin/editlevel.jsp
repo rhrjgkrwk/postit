@@ -1,15 +1,14 @@
-<%@page import="dao.MemberDao"%>
+<%@page import="dao.PostDao"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 
 <%
 	//point를 입력했으면
-	MemberDao dao = new MemberDao();
 	String result = "";
-	if (request.getParameter("point")!=null) {
-		String email = (String)request.getParameter("email");
-		int point = Integer.parseInt((String)request.getParameter("point"));
-		boolean flag = dao.addPoint(email, point);
+	if (request.getParameter("level")!=null) {
+		int post_id = Integer.parseInt((String)request.getParameter("post_id"));
+		int level = Integer.parseInt((String)request.getParameter("level"));
+		boolean flag = new PostDao().updatePostLevel(post_id, level);
 		if(flag){
 			result = "{\"result\": true}";
 		}

@@ -11,12 +11,13 @@
 
 	MemberDao memberDao = new MemberDao();
 	PostDao postDao = new PostDao();
-	HashMap<MemberVO, PostVO> allInfo = new HashMap<>();
-	JSONArray ja = new JSONArray();
+	HashMap<MemberVO, PostVO> allInfo = memberDao.getAllInfo();
 	
+	
+	
+	JSONArray ja = new JSONArray();
 	for(MemberVO memberVo : allInfo.keySet()){
 		//여기에서 JSON으로 만들자..
-		
 		JSONObject jo = new JSONObject();
 		PostVO postVo = allInfo.get(memberVo);
 		jo.put("email", memberVo.getEmail());

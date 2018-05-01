@@ -6,9 +6,10 @@
 	//point를 입력했으면
 	MemberDao dao = new MemberDao();
 	String result = "";
-	if (request.getParameter("inputpoint")!=null) {
+	if (request.getParameter("email")!=null) {
 		String email = (String)request.getParameter("email");
-		boolean flag = dao.deleteMember(email);
+		int post_id = Integer.parseInt((String)request.getParameter("post_id"));
+		boolean flag = dao.deleteUser(email, post_id);
 		if(flag){
 			result = "{\"result\": true}";
 		}

@@ -57,7 +57,7 @@ public class PostDao extends ConnectDB {
 		} finally {
 			try {
 				pstmt.close();
-				rs.close();
+				//rs.close();
 				conn.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
@@ -172,7 +172,7 @@ public class PostDao extends ConnectDB {
 		}
 	}
 
-	public void updatePostLevel(int post_id, int post_level) { // post level을
+	public boolean updatePostLevel(int post_id, int post_level) { // post level을
 																// 업그레이드한다.
 		String sql = "UPDATE POST SET POST_LEVEL=? WHERE POST_ID = ?";
 		try {
@@ -180,20 +180,26 @@ public class PostDao extends ConnectDB {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, post_level);
 			pstmt.setInt(2, post_id);
-			pstmt.executeUpdate();
-
+			int res = pstmt.executeUpdate();
+			if (res>0) {
+				return true;
+			}
+			else {
+				return false;
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			try {
 				pstmt.close();
-				rs.close();
+				//rs.close();
 				conn.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
+		return false;
 	}
 }

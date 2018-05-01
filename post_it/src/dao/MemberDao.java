@@ -107,9 +107,12 @@ public class MemberDao extends ConnectDB{
 			rs = pstmt.executeQuery();
 			HashMap<MemberVO, PostVO> res = new HashMap<>();
 			while (rs.next()) { 
-				res.put(new MemberVO(rs.getString(1), rs.getString(2), rs.getString(3), rs.getInt(4), rs.getInt(5)),
-						new PostVO(rs.getInt(6), rs.getString(7), rs.getInt(8),rs.getString(9)));
+				MemberVO mvo = new MemberVO(rs.getString(1), rs.getString(2), rs.getString(3), rs.getInt(4), rs.getInt(5));
+				PostVO pvo = new PostVO(rs.getInt(6), rs.getString(7), rs.getInt(8),rs.getString(9));
+				res.put(mvo,pvo);
+				System.out.println(mvo+" "+pvo);
 			}
+			
 			return res; // ?
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -126,19 +129,22 @@ public class MemberDao extends ConnectDB{
 	}
 
 	////////////////// MEMBER JOIN,DELETE, UPDATE////////////////////
-	public void insertUser(MemberVO vo) {
-		String sql = "INSERT" + " INTO MEMBER (EMAIL,PASSWORD,NAME,POINT,POST_ID) " + " VALUES(?,?,?,?,?)";
+	public boolean insertUser(MemberVO vo) {
+		String sql = "INSERT" + " INTO MEMBER (EMAIL,PASSWORD,NAME,POINT,POST_ID) " + " VALUES(?,?,?,100,POST_SEQ.CURRVAL)";
 		try {
+			new PostDao().addNewPost();
 			getConn();
 			pstmt = conn.prepareStatement(sql);
-
 			pstmt.setString(1, vo.getEmail());
 			pstmt.setString(2, vo.getPassword());
 			pstmt.setString(3, vo.getName());
-			pstmt.setInt(4, vo.getPoint());
-			pstmt.setInt(5, vo.getPost_id());
-			pstmt.executeUpdate();
-
+			int res = pstmt.executeUpdate();
+			if (res>0) {
+				return true;
+			}
+			else{
+				return false;
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -149,17 +155,20 @@ public class MemberDao extends ConnectDB{
 				e.printStackTrace();
 			}
 		}
+		return false;
 	}
 
 	// -deleteUser(String Email) ->post도 같이 지운다
-	public boolean deleteUser(String email) {
+	public boolean deleteUser(String email, int post_id) {
 		String sql = "DELETE FROM MEMBER WHERE EMAIL =?";
 		try {
+			
+			
 			getConn();
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, email);
 			int res = pstmt.executeUpdate();
-
+			new PostDao().deletePost(post_id);
 			if (res > 0) {
 				return true;
 			} else
@@ -169,7 +178,7 @@ public class MemberDao extends ConnectDB{
 			e.printStackTrace();
 		} finally {
 			try {
-				pstmt.close();
+				//pstmt.close();
 				conn.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -208,12 +217,19 @@ public class MemberDao extends ConnectDB{
 	}
 
 	public boolean addPoint(String email, int point) {
+		String sqlpoint = "select point from member where EMAIL=?";
 		String sql = "UPDATE MEMBER SET point =? " + " where EMAIL=? ";
 		try {
 			getConn();
-			pstmt = conn.prepareStatement(sql);
-
-			pstmt.setInt(1, point);
+			
+			pstmt = conn.prepareStatement(sqlpoint);			
+			pstmt.setString(1, email);
+			rs = pstmt.executeQuery();
+			rs.next();
+			int prevPoint = rs.getInt(1);
+			
+			pstmt = conn.prepareStatement(sql);	
+			pstmt.setInt(1, prevPoint + point);
 			pstmt.setString(2, email);
 
 			int res = pstmt.executeUpdate();
