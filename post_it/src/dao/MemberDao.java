@@ -251,4 +251,32 @@ public class MemberDao extends ConnectDB{
 		}
 		return false;
 	}
+	
+	public boolean changePassword(String email, String newPassword) {
+		String sql = "UPDATE MEMBER SET PASSWORD =? WHERE EMAIL=? ";
+		try {
+			getConn();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, newPassword);
+			pstmt.setString(2, email);
+
+			int res = pstmt.executeUpdate();
+			if (res > 0) {
+				return true;
+			} else
+				return false;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				pstmt.close();
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return false;
+	}
+	
 }
