@@ -79,6 +79,31 @@ public class MemberDao extends ConnectDB {
 		return null;
 
 	}
+	
+	public MemberVO getMemberByPostId(int post_id) {
+		String sql = "SELECT * FROM MEMBER WHERE POST_ID =? ";
+		try {
+			getConn();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, post_id);
+			rs = pstmt.executeQuery();
+			rs.next();
+			return new MemberVO(rs.getString(1), rs.getString(2), rs.getString(3), rs.getInt(4), rs.getInt(5));
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				pstmt.close();
+				rs.close();
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return null;
+
+	}
+	
 
 	public ArrayList<MemberVO> getAllMember() {
 

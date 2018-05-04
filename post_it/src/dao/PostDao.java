@@ -171,6 +171,9 @@ public class PostDao extends ConnectDB {
 			}
 		}
 	}
+	
+	
+	
 
 	public boolean updatePostLevel(int post_id, int post_level) { // post level을
 																	// 업그레이드한다.
@@ -232,5 +235,34 @@ public class PostDao extends ConnectDB {
 		return false;
 	}
 	
+	public boolean updatePostContent(int post_id, String post_content) { // post level을
+		// 업그레이드한다.
+		String sql = "UPDATE POST SET POST_CONTENT=? WHERE POST_ID = ?";
+		try {
+			getConn();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, post_content);
+			pstmt.setInt(2, post_id);
+			int res = pstmt.executeUpdate();
+			if (res > 0) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				pstmt.close();
+				// rs.close();
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return false;
+	}
 	
 }

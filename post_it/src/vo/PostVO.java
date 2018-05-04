@@ -1,6 +1,8 @@
 package vo;
 
-public class PostVO {
+import java.util.Comparator;
+
+public class PostVO implements Comparable<PostVO>{
 	private int post_id;
 	private String post_content;
 	private int post_level;
@@ -53,5 +55,10 @@ public class PostVO {
 	public String toString() {
 		// TODO Auto-generated method stub
 		return post_id+" "+post_content+" "+post_level+" "+post_color;
+	}
+	@Override
+	public int compareTo(PostVO o) {
+		// TODO Auto-generated method stub
+		return o.post_level - this.post_level;
 	}
 }
