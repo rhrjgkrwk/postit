@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="jquery-3.2.1.min.js"></script>
+<script>
+$(document).ready(function(){
+	$("#ajax_btn").on('click',function(){
+		requestAjax();
+		//requestAjax(1); 1페이지
+	});//on end
+	
+	function requestAjax(){
+		//function requestAjax(page){
+		$.ajax({
+			url:"ajax_login.jsp",
+			type:'post',
+			//data:{'id':$("#id").val() ,'pw': $("#pw").val() },
+			data: $("#fm").serializeArray(),
+			//data:{'pagenum':page},
+			//fm이라는 form 에 들어가있는거를 name에 들어간 속성을 value로 처리해줌'
+			dataType:'text',
+			success:function(server_result){
+				//위에문장 성립X? 실행 X
+				var server_json =JSON.parse(server_result);
+				if(server_json.auth == true){
+					$("#result").text(server_json.logintime+ "에 로그인한 정상 사용자입니다.");
+					$("#result").css('color', 'blue');
+				}
+				else{
+					$("#result").text("아이디 또는 암호를 확인하세요");
+					$("#result").css('color', 'red');
+				}
+			} ,
+			error:function(e){ alert(e);} ,
+			complete:function(){alert("서버통신완료!!")}
+		});//ajax-end
+	}//requestAjax-end
+}); //ready-end
+
+</script>
+</head>
+<body>
+
+<form id="fm" action="ajax_login.jsp" method="post">
+아이디:<input type= text id="id" name="id"><br>
+<!-- name속성은 ? id속성은 jquery나 애들한테 보낼때 -->
+암호:<input type="password" id="pw" name="pw"><br>
+<input type="submit" value="로그인">
+<input type="button" id="ajax_btn" value="ajax로그인">
+</form>
+
+<div id="result" style="border:solid 3px yellow"> ajax 결과를 여기에 출력해주세요</div>
+
+</body>
+</html>

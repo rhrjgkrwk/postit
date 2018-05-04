@@ -5,8 +5,49 @@
 <title>그리드</title>
  <link rel="stylesheet" href="index.css">
  <link rel="stylesheet" href="basic.css">
+ <script src="jquery-3.2.1.min.js"></script>
+ <script>
+/*  $(document).ready(function(){
+		
+	 $("#loginbtn").on('click',function(){
+			loginAjax();
+		});
+ 	function loginAjax(){
+ 		$.ajax({
+ 			url:"login.jsp",
+			type:'post',
+ 		});
+ 	}//loginAjax-end 
+ 	
+ 	} */
+ 
+/*  	$(function() {
+ 		$('.loginbtn').before('< src="login.jsp" class="overlay" />');
+ 		}); */
+ 	//
+ 
+ function on() {
+    document.getElementById("fm").style.display = "block";
+}
+
+function off() {
+    document.getElementById("fm").style.display = "none";
+}
+ 
+ 
+ </script>
 </head>
 <body>
+
+<form action="login.jsp" method="get" id="fm">
+<!-- <p style="text-align:right "> -->
+<input type="submit" value="로그인"  style="text-align:right ">
+<!--  </p> -->
+ </form>
+<!-- class="loginbtn" <input type="button" value="로그인" id="loginbtn" src="login.jsp"> -->
+
+<!--    <input type="button" value="회원가입" id="regisbtn"> -->
+
 <div class ="container">
 <div class ="test">test</div>
 <div class ="sixteen">16</div>
