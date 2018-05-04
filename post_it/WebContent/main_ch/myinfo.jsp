@@ -15,25 +15,10 @@
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<link rel="stylesheet" href="../css/myinfo.css">
 <link rel="stylesheet" href="../css/style.css">
-
-
-
 </head>
-
-
-
 <body>
-
-<%
-// 	test 용 세션
-	MemberVO ss = new MemberDao().getMemberByEmail("dd@gmgm.co");
-	session.setAttribute("ss", ss);
-%>
-
-
-
+	<div id="myinfo-container"> 
 
 	<!-- 헤더는 따로 작성 후 include -->
 
@@ -41,28 +26,30 @@
 
 
 	<%
-		MemberVO memberVO = (MemberVO)session.getAttribute("ss");
+		
 		PostVO postVO = null;
-		if(memberVO==null){// 		session. 로그인 정보 없으면 redirect
-		
-		response.sendRedirect("../main/main.jsp"); // main으로 가거나 로그인 페이지로 .
-		
+		MemberVO memberVO =null;
+		if(session.getAttribute("loginSession") == null){// 		session. 로그인 정보 없으면 redirect
+	%>
+		<jsp:forward page="main.jsp"></jsp:forward>
+	<%
 		}
 		else{// 로그인 정보가 있으면 postVO를 가져온다.
+			memberVO = (MemberVO)session.getAttribute("loginSession");
 			postVO = new PostDao().getPost(memberVO.getPost_id());
 		}
 	%>
-
-
-	<nav class="navbar navbar-inverse">
-		<div class="container-fluid">
-			<ul class="nav navbar-nav">
-				<li class="nav-center"><a href="#myinfo">My Info</a></li>
-				<li class="nav-center"><a href="#upgrade">Upgrade</a></li>
-				<li class="nav-center"><a href="#chargepoint">Charge Point</a></li>
-			</ul>
-		</div>
-	</nav>
+	<jsp:include page="header.jsp"></jsp:include>
+	<br>
+	<div id="myinfo-nav-container">
+		<ul id="myinfo-navlist" class="navbar-nav navbar-center">
+			<li class=""><h2><a href="#myinfo">My Info</a></h2></li>
+			<li class=""><h2><a href="#upgrade">Upgrade</a></h2></li>
+			<li class=""><h2><a href="#chargepoint">Charge Point</a></h2></li>
+		</ul>
+	</div>
+	
+	<br>
 	<div id="myinfo" class="table-container">
 		<h2>My info</h2>
 		<div>
@@ -78,7 +65,7 @@
 				</tr>
 				<tr>
 					<td>비밀번호 :</td>
-					<td><input id="password" class="form-control" type="password">
+					<td><input id="passworda" class="form-control" type="password">
 					</td>
 					<td></td>
 				</tr>
@@ -168,7 +155,12 @@
 	<div id="chargepoint" class="table-container">
 		<h2>Charge Point</h2>
 		<div>
-			<p>Everyday, massive amounts of data are generated in every part
+			<p>
+			관리자에게 직접 문의하세요. 
+			
+			<a href="mailto:rhrjgkrwk@gmail.com">rhrjgkrwk@gmail.com</a>
+			
+			Everyday, massive amounts of data are generated in every part
 				of our lives. That makes data fluency an indispensable skill to help
 				you succeed - no matter what industry you’re in. At DataCamp, we’re
 				here to help, whether you're just getting started or are looking to
@@ -179,6 +171,12 @@
 				looking to dig deeper.</p>
 		</div>
 	</div>
+	
+	
+	
+	</div>
+	
+	
 </body>
 
 <script type="text/javascript">
@@ -186,18 +184,15 @@
 		$('#password-change').on('click', passwordChange);
 		$('.upgrade-level').on('click', upgrageLevel);
 		
-		
-		
-		
 		function passwordChange() {
-			if ($('#password').val() == $('#re-password').val()) {
+			if ($('#passworda').val() == $('#re-password').val()) {
 				//ajax
 				$.ajax({
 					url : "passwordchange.jsp", //요청할 주소.
 					type : "post",
 					datatype : "json",
 					data : {
-						"password" : $('#password').val(),
+						"password" : $('#passworda').val(),
 					},
 					//성공시 호출함수
 					success : function(server_result) { //json 형태로 넘어온다.
@@ -225,11 +220,6 @@
 		
 		
 		function upgrageLevel() {
-			alert(<%= memberVO.getPoint() %>);
-			alert($(this).attr('name'));
-			
-			
-			
 			if ( parseInt($(this).attr('name')) <= <%= memberVO.getPoint() %>) {
 				//ajax
 				$.ajax({

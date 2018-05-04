@@ -21,77 +21,147 @@
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<link rel="stylesheet" href="index.css">
-<link rel="stylesheet" href="basic.css">
+ <script src="https://cdn.rawgit.com/vast-engineering/jquery-popup-overlay/1.7.13/jquery.popupoverlay.js"></script>
+<link rel="stylesheet" href="../css/style.css">
+<style type="text/css">
+#popup {
+	border: solid 1px black;
+}
 
+#popup{
+  transition: all 0.3s;
+}
+
+
+</style>
 <script type="text/javascript">
 	$('document').ready(function() {
-		function generateRandomDiv() {
-			var sum = 0;
-			var idx = 0;
-			//alert($('.container').width()*$('.container').width());
-			var divList = [];
-
-			while ($('.container').width() * $('.container').width() >= sum) {
-				idx++;
-				var rn = Math.ceil(Math.random() * 4); //random lv generator
-				var tg = "<div class='lv"+rn+"'>idx" + idx + "</div>";
-
-				var tmp = {
-					lv : rn,
-					idx : idx,
-					tg : tg,
-					toString : function() {
-						return rn + " " + idx + " " + " " + tg;
+		function addPoint(email, point) {
+			$.ajax({
+				url : "postit.jsp", //요청할 주소.
+				type : "post",
+				datatype : "json",
+				data : {
+					"email" : email,
+					"point" : point
+				},
+				//성공시 호출함수
+				success : function(server_result) { //json 형태로 넘어온다.
+					var temp = JSON.parse(server_result);
+					if (temp.result == true) {
+						alert("반영되었다.");
+						getMemberList();
+					} else {
+						alert("반영되지 않았다.");
 					}
+				},
+				//error 호출 함수
+				error : function(e) {
+					alert(e);
+				},
+
+				//연결 종료시 호출 함수
+				complete : function() {
+
 				}
-				divList.push(tmp);
+			});//ajax end
+		}
 
-				// 				sum+=$('.lv'+rn).width()*$('.lv'+rn).height();
-				sum += 10000;
-			}
+		function deleteMember(email, post_id) {
+			$.ajax({
+				url : "deletemember.jsp", //요청할 주소.
+				type : "post",
+				datatype : "json",
+				data : {
+					"post_id" : post_id,
+					"email" : email
+				},
+				//성공시 호출함수
+				success : function(server_result) { //json 형태로 넘어온다.
+					var temp = JSON.parse(server_result);
+					if (temp.result == true) {
+						alert("반영되었다.");
+						getMemberList();
+					} else {
+						alert("반영되지 않았다.");
+					}
+				},
+				//error 호출 함수
+				error : function(e) {
+					alert(e.message);
+				},
 
-			alert(divList.length);
-			divList.sort(function(a, b) {
-				return a.lv < b.lv ? 1 : a.lv > b.lv ? -1 : 0;
-			});
+				//연결 종료시 호출 함수
+				complete : function() {
 
-			for (var i = 0; i < divList.length; i++) {
-				//alert(divList[i]);
-				$('.container').append(divList[i].tg);
-			}
+				}
+			});//ajax end		
+		}
 
-		};
-		//generateRandomDiv();
+		$('div[class^="p-"]').popup({
+			transition : 'all 0.3s',
+			scrolllock : true
+		});
+		
+		$('.postit').on('click', function() {
+			var temp = $(this).attr('id');
+			alert(temp);
+			$('.p-'+temp).popup('show');
+		});
+
 	});
 </script>
 </head>
 <body>
-	<div id="header">test</div>
+
+<!-- 	header -->
+	<jsp:include page="header.jsp"></jsp:include>
 	<br>
 	<div class="container">
 		<%
 			MemberDao memberDao = new MemberDao();
 			ArrayList<PostVO> posts = new PostDao().getAllPosts(); //level 기준으로 정렬하자.
 			Collections.sort(posts);
-			
+
 			for (PostVO post : posts) {
 				MemberVO member = memberDao.getMemberByPostId(post.getPost_id());
-				String name = member==null?"T.T":member.getName();
+				String name = member == null ? "" : member.getName();
+				String email = member == null ? "" : member.getEmail();
 		%>
-		<div class='lv<%=post.getPost_level()%>'>
-				<table>
-				 	<tr>
-				 		<td class='lv<%=post.getPost_level()%>'><%=name%></td>
-				 	</tr>	
-					<tr>
-						<td><%=post.getPost_content()%></td>
-					</tr>
-				</table>
+
+		<div class='postit lv<%=post.getPost_level()%>' id="<%= post.getPost_id() %>">
+			<table>
+				<tr>
+					<td class='lv<%=post.getPost_level()%>'><%=name%></td>
+				</tr>
+				<tr>
+					<td><%=post.getPost_content()%></td>
+				</tr>
+			</table>
 		</div>
+		
+		
+		<div class="p-<%= post.getPost_id() %> post-popup">
+			<p>
+				sadjlgkajdsl;ajgl;ja;slkjglkjg
+				adjlgkajdsl;ajgl;ja;slkjglkjg
+				adjlgkajdsl;ajgl;ja;slkjglkjg
+				adjlgkajdsl;ajgl;ja;slkjglkjg
+				adjlgkajdsl;ajgl;ja;slkjglkjg
+				adjlgkajdsl;ajgl;ja;slkjglkjg
+				adjlgkajdsl;ajgl;ja;slkjglkjg
+				adjlgkajdsl;ajgl;ja;slkjglkjg
+				adjlgkajdsl;ajgl;ja;slkjglkjg
+				
+			</p>
+			<input type="button" class="btn btn-danger" value="수정">
+			
+		</div>
+
 		<%
 			}
 		%>
+<!-- [name^="value"] -->
 	</div>
 </body>
 </html>

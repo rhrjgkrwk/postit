@@ -14,9 +14,9 @@ public class MemberDao extends ConnectDB {
 	private ResultSet rs = null;
 
 	/*
-	 * ȸ������ 1.�ߺ�üũ (isDuplicate) -> return boolean 2. ȸ������ -getMemberByEmail()
-	 * ->return MemberVO -getAllMember()->return ArrayList<MemberVO> 3.ȸ�����
-	 * -insertUser(MemberVO vo) -deleteUser(String Email) ->post�� ���� �����
+	 * 회占쏙옙占쏙옙占쏙옙 1.占쌩븝옙체크 (isDuplicate) -> return boolean 2. 회占쏙옙占쏙옙占쏙옙 -getMemberByEmail()
+	 * ->return MemberVO -getAllMember()->return ArrayList<MemberVO> 3.회占쏙옙占쏙옙占�
+	 * -insertUser(MemberVO vo) -deleteUser(String Email) ->post占쏙옙 占쏙옙占쏙옙 占쏙옙占쏙옙占�
 	 * -UpdateUser
 	 * 
 	 */
@@ -24,35 +24,71 @@ public class MemberDao extends ConnectDB {
 	/////////////////// CHECK////////////////////
 	public boolean isDuplicate(String email) throws SQLException {
 		String sql = "select count(*) from member where email = ? ";
-		getConn();
-		pstmt = conn.prepareStatement(sql);
-
-		pstmt.setString(1, email);
-		rs = pstmt.executeQuery();
-		rs.next();
-		int check = rs.getInt(1);
-		if (check == 0) {
-			return false;
-		} else
-			return true;
-	}
-
-	public boolean loginCheck(String email, String password) throws SQLException {
-		String sql = "select password from member where email = ?";
-		if (isDuplicate(email)) { //id�� �ִٸ� 
+		try {
 			getConn();
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, password);
+
+			pstmt.setString(1, email);
 			rs = pstmt.executeQuery();
 			rs.next();
-			String passwordChk = rs.getString(1);
-			
-			if (!passwordChk.equals(password)) {
+			int check = rs.getInt(1);
+			if (check == 0) {
 				return false;
 			} else
 				return true;
-		} else
-			return false;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				pstmt.close();
+				rs.close();
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return false;
+	}
+
+	public boolean loginCheck(String email, String password) {
+		String sql = "SELECT PASSWORD FROM MEMBER WHERE EMAIL = ?";
+		try {
+			if (isDuplicate(email)) { //id占쏙옙 占쌍다몌옙 
+				getConn();
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, email);
+				rs = pstmt.executeQuery();
+				String passwordChk=null;
+				if (rs.next()) {
+					passwordChk = rs.getString(1);
+					System.out.println("---loginchk---");
+					System.out.println(password);
+					System.out.println(passwordChk);
+					if (passwordChk.equals(password)) {
+						return true;
+					}
+				}
+				else{
+					return false;
+				}
+			} else{
+				return false;
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				pstmt.close();
+				rs.close();
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return false;
+			
 	}
 
 	/////////// MEMBER CHECK/////////////////////
@@ -198,7 +234,7 @@ public class MemberDao extends ConnectDB {
 		return false;
 	}
 
-	// -deleteUser(String Email) ->post�� ���� �����
+	// -deleteUser(String Email) ->post占쏙옙 占쏙옙占쏙옙 占쏙옙占쏙옙占�
 	public boolean deleteUser(String email, int post_id) {
 		String sql = "DELETE FROM MEMBER WHERE EMAIL =?";
 		try {
