@@ -3,16 +3,24 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<script src="jquery-3.2.1.min.js"></script>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="index.css">
+<link rel="stylesheet" href="basic.css">
+
 <script>
 $(document).ready(function(){
-	$("#ajax_btn").on('click',function(){
-		requestAjax();
+	$("#ajax_btn").on('click',requestAjax);
 		//requestAjax(1); 1페이지
-	});//on end
+	//on end
 	
 	function requestAjax(){
 		//function requestAjax(page){
+			
 		$.ajax({
 			url:"login.jsp",
 			type:'post',
@@ -21,23 +29,25 @@ $(document).ready(function(){
 			//data:{'pagenum':page},
 			//fm이라는 form 에 들어가있는거를 name에 들어간 속성을 value로 처리해줌'
 			dataType:'text',
-			success:function(server_result){
-				//위에문장 성립X? 실행 X
-				var server_json =JSON.parse(server_result);
-				if(server_json.auth == true){
-					/* 성공시? 메인화면에 아디랑 비번이 박혀있어야한다!? */
+	
+	success : function(server_result) {
+					//위에문장 성립X? 실행 X
+					var server_json = JSON.parse(server_result);
+					if (server_json.auth == true) {
+						alert("성공");/* 성공시? 메인화면에 아디랑 비번이 박혀있어야한다!? */
+					} else {
+						alert("실패");
+					}
+				},
+				
+	error : function(e) {
+					alert(e);
+				},
+				complete : function() {
 				}
-				else{
-					$("#result").text("아이디 또는 암호를 확인하세요");
-					$("#result").css('color', 'red');
-				}
-			} ,
-			error:function(e){ alert(e);} ,
-			complete:function(){alert("로그인 성공")}
-		});//ajax-end
-	}//requestAjax-end
-}); //ready-end
-
+			});//ajax-end
+		}//requestAjax-end
+	}); //ready-end
 </script>
 </head>
 <body>

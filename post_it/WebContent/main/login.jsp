@@ -51,7 +51,8 @@ MemberDao dao = new MemberDao();
 if(dao.loginCheck(email, password)){
 	
       auth = "{\"auth\": true}";
-   } else {
+      session.setAttribute("loginSession" , dao.getMemberByEmail(email));
+} else {
       auth = "{\"auth\": false}";
    
    }
