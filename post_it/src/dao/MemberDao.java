@@ -14,9 +14,9 @@ public class MemberDao extends ConnectDB {
 	private ResultSet rs = null;
 
 	/*
-	 * È¸¿ø°¡ÀÔ 1.Áßº¹Ã¼Å© (isDuplicate) -> return boolean 2. È¸¿øÁ¤º¸ -getMemberByEmail()
-	 * ->return MemberVO -getAllMember()->return ArrayList<MemberVO> 3.È¸¿øµî·Ï
-	 * -insertUser(MemberVO vo) -deleteUser(String Email) ->postµµ °°ÀÌ Áö¿î´Ù
+	 * È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 1.ï¿½ßºï¿½Ã¼Å© (isDuplicate) -> return boolean 2. È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ -getMemberByEmail()
+	 * ->return MemberVO -getAllMember()->return ArrayList<MemberVO> 3.È¸ï¿½ï¿½ï¿½ï¿½ï¿½
+	 * -insertUser(MemberVO vo) -deleteUser(String Email) ->postï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
 	 * -UpdateUser
 	 * 
 	 */
@@ -39,7 +39,7 @@ public class MemberDao extends ConnectDB {
 
 	public boolean loginCheck(String email, String password) throws SQLException {
 		String sql = "select password from member where email = ?";
-		if (isDuplicate(email)) { //id°¡ ÀÖ´Ù¸é 
+		if (isDuplicate(email)) { //idï¿½ï¿½ ï¿½Ö´Ù¸ï¿½ 
 			getConn();
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, password);
@@ -198,7 +198,7 @@ public class MemberDao extends ConnectDB {
 		return false;
 	}
 
-	// -deleteUser(String Email) ->postµµ °°ÀÌ Áö¿î´Ù
+	// -deleteUser(String Email) ->postï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
 	public boolean deleteUser(String email, int post_id) {
 		String sql = "DELETE FROM MEMBER WHERE EMAIL =?";
 		try {
